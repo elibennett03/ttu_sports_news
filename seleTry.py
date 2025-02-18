@@ -1,5 +1,6 @@
 import json
 import time
+from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -9,6 +10,20 @@ from selenium.webdriver.common.by import By
 
 # URL of the page we want to scrape
 URL = "https://www.ttusports.com/general/headlines-featured"
+# Base url
+BASE_URL = "https://www.ttusports.com"
+
+# rss_0.91U
+# rss_1.0
+# rss_2.0
+# rss_0.93
+# rss_0.92
+# rss_0.94
+# rss_0.91N
+# rss_0.9
+# atom_0.3
+# atom_1.0
+# rssgraffiti
 
 # Set up Selenium WebDriver
 def setup_driver():
@@ -53,24 +68,26 @@ def extract_image_src(soup):
     for span in soup.find_all('span', class_='thumb'):
         img = span.find('img')
         if img and 'src' in img.attrs:
-            images.append(img['src'])
+            img_url = urljoin(BASE_URL, img['src'])
+            images.append(img_url)
     return images
 
 # Extract titles from articles
-def extract_titles(soup):
-    titles = []
-    for span in soup.find_all('span', class_='thumb'):
-        img = span.find('img')
-        if img and 'src' in img.attrs:
-            images.append(img['src'])
-    return titles
+# def extract_titles(soup):
+#     titles = []
+#     for span in soup.find_all('span', class_='thumb'):
+#         img = span.find('img')
+#         if img and 'src' in img.attrs:
+#             img_url = urljoin(BASE_URL, img['src'])
+#             images.append(img_url)
+#     return titles
 
 if __name__ == "__main__":
     page_source = request_page(URL)
     soup = parse_page(page_source)
     images = extract_image_src(soup)
-    titles = extract_titles(soup)
+    # titles = extract_titles(soup)
     print(images)
-    print(titles)
+    # print(titles)
 
 #https://www.ttusports.com/general/2024-25/photos/2024-25_Tennessee_Tech_AD_Honor_Roll_Fall_-24.jpg?max_width=400&useS3=true
