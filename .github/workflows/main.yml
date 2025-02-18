@@ -26,17 +26,17 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run scraper
-      run: python main.py
+      run: python rss_sports_feed.py
 
     - name: Configure Git
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
 
     - name: Commit changes
       run: |
-        git add schedule.json group_classes.json
-        git diff --cached --quiet || git commit -m 'Update JSON file with new data'
+        git add rss_feed.json
+        git commit -m 'Update JSON file with new data' || echo "No changes to commit"
       continue-on-error: true  # Avoids failing if no changes are detected
 
     - name: Push changes
